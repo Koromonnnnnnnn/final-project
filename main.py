@@ -21,6 +21,11 @@ yPos = 0
 xVel = 0
 yVel = 0
 
+LEFT = 0
+RIGHT = 1
+UP = 2
+keys = [False, False, False]
+
 isOnGround = False
 rocketOn = False
 crashed = False
@@ -43,7 +48,41 @@ while not doExit:
         if event.type == pygame.QUIT:
             doExit = True
 
+    # Input Section
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            keys[LEFT] = True
+        elif event.key == pygame.K_RIGHT:
+            keys[RIGHT] = True
+        elif event.key == pygame.K_UP:
+            keys[UP] = True
+    elif event.type == pygame.KEYUP:
+        if event.key == pygame.K_LEFT:
+            keys[LEFT] = False
+        elif event.key == pygame.K_RIGHT:
+            keys[RIGHT] = False
+        elif event.key == pygame.K_UP:
+            keys[UP] = False
+
     # Physics Section
+    if keys[LEFT] == True:
+        xVel = -1 / 60
+    elif keys[RIGHT] == True:
+        xVel = 1 / 60
+    elif keys[UP] == True:
+        yVel = 0.417 / 60
+        isOnGround = False
+        rocketOn = True
+    else:
+        xVel = 0
+        yVel = 0
+        rocketOn = False
+
+    if isOnGround == False:
+        yVel = 1
+
+    xPos += xVel
+    yPos += yVel
 
     # Render Section
 
