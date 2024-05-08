@@ -77,9 +77,8 @@ while not doExit:
         xVel = 0
         yVel = 0
         rocketOn = False
-
-    if isOnGround == False:
-        yVel = 1
+        if isOnGround == False:
+            yVel = 1
 
     xPos += xVel
     yPos += yVel
