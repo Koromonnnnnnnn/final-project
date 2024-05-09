@@ -8,7 +8,7 @@ import os
 
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d,%d" % (20, 20)
 
-#create game window
+# create game window
 screenWidth = 700
 screenHeight = 1000
 
@@ -93,5 +93,6 @@ while not doExit:
     yPos += yVel
 
     # Render Section
+    pygame.display.update()
 
 pygame.quit()
