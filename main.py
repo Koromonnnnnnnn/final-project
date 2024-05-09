@@ -16,7 +16,7 @@ doExit = False
 clock = pygame.time.Clock()
 FPS = 60
 
-music = pygame.mixer.music.load('01.mp3')
+music = pygame.mixer.music.load("01.mp3")
 pygame.mixer.music.set_volume(0.35)
 pygame.mixer.music.play(-1)
 
