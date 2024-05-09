@@ -2,6 +2,7 @@ import pygame
 from pygame import mixer
 
 pygame.init()
+mixer.init()
 
 import os
 
@@ -14,6 +15,10 @@ pygame.display.set_caption("Lunar Lander FInal")
 doExit = False
 clock = pygame.time.Clock()
 FPS = 60
+
+music = pygame.mixer.music.load('01.mp3')
+pygame.mixer.music.set_volume(0.35)
+pygame.mixer.music.play(-1)
 
 # Player Variables
 xPos = 0
