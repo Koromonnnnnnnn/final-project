@@ -8,7 +8,11 @@ import os
 
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d,%d" % (20, 20)
 
-screen = pygame.display.set_mode((700, 1000))
+#create game window
+screenWidth = 700
+screenHeight = 1000
+
+screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Lunar Lander FInal")
 
 # Game Variables
