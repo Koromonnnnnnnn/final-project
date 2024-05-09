@@ -89,6 +89,17 @@ while not doExit:
         if isOnGround == False:
             yVel = 1
 
+    if isOnGround == True and abs(yVel)>.5:
+        crashed = True
+        screen.blit(text3, (200,500))
+        pygame.display.update()
+        pygame.time.wait(1000)
+        xPos = 350
+        yPos = 0
+        xVel = 0
+        yVel = 0
+        isOnGround = False
+        
     xPos += xVel
     yPos += yVel
 
