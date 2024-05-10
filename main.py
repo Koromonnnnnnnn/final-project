@@ -28,7 +28,7 @@ pygame.mixer.music.play(-1)
 xPos = 0
 yPos = 0
 xVel = 0
-yVel = 0
+yVel = -10/60
 
 LEFT = 0
 RIGHT = 1
@@ -74,21 +74,26 @@ while not doExit:
             keys[UP] = False
 
     # Physics Section
+
+    #left and right movement
     if keys[LEFT] == True:
         xVel = -1 / 60
     elif keys[RIGHT] == True:
         xVel = 1 / 60
-    elif keys[UP] == True:
-        yVel = 0.417 / 60
-        isOnGround = False
-        rocketOn = True
     else:
         xVel = 0
-        yVel = 0
+
+    #up/down velocity
+    if keys[UP]:
+        yVel = .417/60
+        rocketOn = True
+        isOnGround = False
+    else:
         rocketOn = False
         if isOnGround == False:
-            yVel = 1
+            yVel += 1.62/60 #look this up
 
+    #Crash if you hit ground too hard
     if isOnGround == True and abs(yVel) > 0.5:
         crashed = True
         screen.blit(text3, (200, 500))
@@ -99,6 +104,17 @@ while not doExit:
         xVel = 0
         yVel = 0
         isOnGround = False
+    
+    #Soft Landing (UNFINISHED PROBABLY BROKEN)
+    if isOnGround == True and abs(yVel) <= 0.5:
+        crashed = False
+        pygame.display.update()
+        pygame.time.wait(1000)
+        xPos = 350
+        yPos = 0
+        xVel = 0
+        yVel = 0
+        isOnGround = True
 
     xPos += xVel
     yPos += yVel
