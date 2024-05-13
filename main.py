@@ -128,6 +128,22 @@ while not doExit:
     text7 = font.render(str(int(1000 - yPos)), 1, (20, 20, 200))
 
     # Render Section
+
+    # Draw the lander and have it set to be a simple square here
+    # Here, if the variable ROcketOn is True, then draw a yellow ellipse behind it to show the rocket flames.
+
+    # Here is how to draw strings on the screen (they are messed up so correct them to properly display on the screen)
+
+    if abs(yVel) < 0.5:
+        screen.blit(text1, (10, 10))
+        screen.blit(text2, (250, 10))
+    else:
+        screen.blit(text4, (10, 10))
+        screen.blit(text5, (250, 10))
+
+    screen.blit(text6, (10, 10))
+    screen.blit(text7, (150, 60))
+
     pygame.display.update()
 
 pygame.quit()
