@@ -28,7 +28,7 @@ pygame.mixer.music.play(-1)
 xPos = 0
 yPos = 0
 xVel = 0
-yVel = -10/60
+yVel = -10 / 60
 
 LEFT = 0
 RIGHT = 1
@@ -75,7 +75,7 @@ while not doExit:
 
     # Physics Section
 
-    #left and right movement
+    # left and right movement
     if keys[LEFT] == True:
         xVel = -1 / 60
     elif keys[RIGHT] == True:
@@ -83,17 +83,17 @@ while not doExit:
     else:
         xVel = 0
 
-    #up/down velocity
+    # up/down velocity
     if keys[UP]:
-        yVel = .417/60
+        yVel = 0.417 / 60
         rocketOn = True
         isOnGround = False
     else:
         rocketOn = False
         if isOnGround == False:
-            yVel += 1.62/60 #look this up
+            yVel += 1.62 / 60  # look this up
 
-    #Crash if you hit ground too hard
+    # Crash if you hit ground too hard
     if isOnGround == True and abs(yVel) > 0.5:
         crashed = True
         screen.blit(text3, (200, 500))
@@ -104,8 +104,8 @@ while not doExit:
         xVel = 0
         yVel = 0
         isOnGround = False
-    
-    #Soft Landing (UNFINISHED PROBABLY BROKEN)
+
+    # Soft Landing (UNFINISHED PROBABLY BROKEN)
     if isOnGround == True and abs(yVel) <= 0.5:
         crashed = False
         pygame.display.update()
@@ -118,6 +118,14 @@ while not doExit:
 
     xPos += xVel
     yPos += yVel
+
+    # Update printed velocity
+    text2 = font.render(str("%.2f" % (yVel * -1)), 1, (0, 200, 200))
+    text5 = font.render(str("%.2f" % (yVel * -1)), 1, (200, 20, 20))
+
+    # Update printed height
+    text6 = font.render("Height:", False, (20, 20, 200))
+    text7 = font.render(str(int(1000 - yPos)), 1, (20, 20, 200))
 
     # Render Section
     pygame.display.update()
