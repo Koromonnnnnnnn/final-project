@@ -8,12 +8,12 @@ import os
 
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d,%d" % (20, 20)
 
-# create game window
+# Create game window
 screenWidth = 700
 screenHeight = 1000
 
 screen = pygame.display.set_mode((screenWidth, screenHeight))
-pygame.display.set_caption("Lunar Lander FInal")
+pygame.display.set_caption("Lunar Lander Final")
 
 # Game Variables
 doExit = False
@@ -25,10 +25,10 @@ pygame.mixer.music.set_volume(0.35)
 pygame.mixer.music.play(-1)
 
 # Player Variables
-xPos = 0
+xPos = screenWidth // 2
 yPos = 0
 xVel = 0
-yVel = -10 / 60
+yVel = 0
 
 LEFT = 0
 RIGHT = 1
@@ -38,6 +38,7 @@ keys = [False, False, False]
 isOnGround = False
 rocketOn = False
 crashed = False
+fuel = 150
 
 # Fonts and strings to render
 pygame.font.init()
@@ -45,10 +46,27 @@ font = pygame.font.SysFont("Comic Sans Ms", 30)
 text1 = font.render("Vertical Velocity:", False, (0, 200, 200))
 text2 = font.render(str(int(yVel)), 1, (0, 200, 200))
 text3 = font.render("YOU CRASHED!", False, (200, 50, 50))
-text4 = font.render("Vertical velocity:", False, (200, 20, 20))
-text5 = font.render(str(int(yVel)), 1, (200, 20, 200))
+text4 = font.render("Vertical Velocity:", False, (200, 20, 20))
+text5 = font.render(str(int(yVel)), 1, (200, 20, 20))
 text6 = font.render("Height:", False, (200, 20, 20))
 text7 = font.render(str(int(yPos)), 1, (20, 20, 200))
+text8 = font.render("Fuel:", False, (20, 200, 20))
+text9 = font.render(str(fuel), 1, (20, 200, 20))
+
+
+# This function below was NOT created by me
+def reset_game():
+    global xPos, yPos, xVel, yVel, fuel, isOnGround, crashed
+    xPos = screenWidth // 2
+    yPos = 0
+    xVel = 0
+    yVel = 0
+    fuel = 150
+    isOnGround = False
+    crashed = False
+
+
+reset_game()
 
 while not doExit:
     clock.tick(FPS)
@@ -75,74 +93,72 @@ while not doExit:
 
     # Physics Section
 
-    # left and right movement
-    if keys[LEFT] == True:
-        xVel = -1 / 60
-    elif keys[RIGHT] == True:
-        xVel = 1 / 60
+    # Left and right movement
+    if keys[LEFT]:
+        xVel -= 0.1
+    elif keys[RIGHT]:
+        xVel += 0.1
     else:
-        xVel = 0
+        xVel *= 0.99
 
-    # up/down velocity
-    if keys[UP]:
-        yVel = 0.417 / 60
+    # Up/down velocity
+    if keys[UP] and fuel > 0:
+        yVel -= 0.1
         rocketOn = True
         isOnGround = False
+        fuel -= 1
     else:
         rocketOn = False
-        if isOnGround == False:
-            yVel += 1.62 / 60  # look this up
+        if not isOnGround:
+            yVel += 1.62 / FPS  # Moon gravitational pull
 
-    # Crash if you hit ground too hard
-    if isOnGround == True and abs(yVel) > 0.5:
-        crashed = True
-        screen.blit(text3, (200, 500))
-        pygame.display.update()
-        pygame.time.wait(1000)
-        xPos = 350
-        yPos = 0
-        xVel = 0
-        yVel = 0
-        isOnGround = False
-
-    # Soft Landing (UNFINISHED PROBABLY BROKEN)
-    if isOnGround == True and abs(yVel) <= 0.5:
-        crashed = False
-        pygame.display.update()
-        pygame.time.wait(1000)
-        xPos = 350
-        yPos = 0
-        xVel = 0
-        yVel = 0
-        isOnGround = True
-
+    # Update position
     xPos += xVel
     yPos += yVel
 
-    # Update printed velocity
+    # Boundaries (Lander kept falling out of the screen so the code wouldn't register a crash. That's why I added these)
+    if xPos < 0:
+        xPos = 0
+        xVel = 0
+    elif xPos > screenWidth - 50:
+        xPos = screenWidth - 50
+        xVel = 0
+
+    if yPos >= screenHeight - 50:
+        isOnGround = True
+        yPos = screenHeight - 50
+
+        if abs(yVel) > 2:
+            crashed = True
+            screen.blit(text3, (200, 500))
+            pygame.display.update()
+            pygame.time.wait(1000)
+            reset_game()
+        else:
+            yVel = 0
+
     text2 = font.render(str("%.2f" % (yVel * -1)), 1, (0, 200, 200))
     text5 = font.render(str("%.2f" % (yVel * -1)), 1, (200, 20, 20))
-
-    # Update printed height
-    text6 = font.render("Height:", False, (20, 20, 200))
-    text7 = font.render(str(int(1000 - yPos)), 1, (20, 20, 200))
+    text7 = font.render(str(int(screenHeight - yPos)), 1, (20, 20, 200))
+    text9 = font.render(str(fuel), 1, (20, 200, 20))
 
     # Render Section
+    screen.fill((0, 0, 0))  # Clear screen
 
-    # Draw the lander and have it set to be a simple square here
-    # Here, if the variable ROcketOn is True, then draw a yellow ellipse behind it to show the rocket flames.
+    # Draw the lander
+    pygame.draw.rect(screen, (255, 255, 255), (xPos, yPos, 50, 50))
+    if rocketOn:
+        pygame.draw.ellipse(
+            screen, (255, 255, 0), (xPos + 10, yPos + 50, 30, 50)
+        )  # Rocket fire
 
-    # Here is how to draw strings on the screen (they are messed up so correct them to properly display on the screen)
-
-    if abs(yVel) < 0.5:
-        screen.blit(text1, (10, 10))
-        screen.blit(text2, (250, 10))
-    else:
-        screen.blit(text4, (10, 10))
-        screen.blit(text5, (250, 10))
-
-    screen.blit(text6, (10, 10))
-    screen.blit(text7, (150, 60))
+    # Display text
+    screen.blit(text1, (10, 10))
+    screen.blit(text2, (250, 10))
+    screen.blit(text6, (10, 50))
+    screen.blit(text7, (150, 50))
+    screen.blit(text8, (10, 90))
+    screen.blit(text9, (100, 90))
 
     pygame.display.update()
 
