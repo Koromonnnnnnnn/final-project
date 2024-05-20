@@ -99,6 +99,7 @@ while not doExit:
     elif keys[RIGHT]:
         xVel += 0.1
     else:
+        # This was taken from Youtube, it's meant to add friction to prevent sliding.
         xVel *= 0.99
 
     # Up/down velocity
