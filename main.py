@@ -94,9 +94,9 @@ while not doExit:
     # Physics Section
 
     # Left and right movement
-    if keys[LEFT]:
+    if keys[LEFT] and fuel > 0:
         xVel -= 0.1
-    elif keys[RIGHT]:
+    elif keys[RIGHT] and fuel > 0:
         xVel += 0.1
     else:
         # This was taken from Youtube, it's meant to add friction to prevent sliding.
