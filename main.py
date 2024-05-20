@@ -38,7 +38,7 @@ keys = [False, False, False]
 isOnGround = False
 rocketOn = False
 crashed = False
-fuel = 150
+fuel = 100
 
 # Fonts and strings to render
 pygame.font.init()
@@ -61,7 +61,7 @@ def reset_game():
     yPos = 0
     xVel = 0
     yVel = 0
-    fuel = 150
+    fuel = 100
     isOnGround = False
     crashed = False
 
@@ -107,7 +107,7 @@ while not doExit:
         yVel -= 0.1
         rocketOn = True
         isOnGround = False
-        fuel -= 1
+        fuel -= 0.5
     else:
         rocketOn = False
         if not isOnGround:
